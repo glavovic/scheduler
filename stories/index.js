@@ -12,6 +12,7 @@ import InterviewerListItem from "components/InterviewerListItem"
 import InterviewerList from "components/InterviewList"
 import Appointment from "components/Appointment/index.js";
 import Empty from "components/Appointment/Empty";
+import Show from "components/Appointment/Show"
 
 storiesOf("Button", module)
   .addParameters({
@@ -144,4 +145,10 @@ storiesOf("Button", module)
         .add("Appointment", () => <Appointment />)
         .add("Appointment with Time", () => <Appointment time="12pm" />)
         .add("Header", () => <header time="12pm"/>)
-        .add("Empty", () => <Empty onAdd={action("onAdd")} />);
+        .add("Empty", () => <Empty onAdd={action("onAdd")} />)
+        .add("Show", () => 
+          <Show 
+            interviewer={interviewer.name} 
+            student="Lydia Miller-Jones"
+            onEdit={action("onEdit")}
+            onDelete={action("onDelete")} />);
