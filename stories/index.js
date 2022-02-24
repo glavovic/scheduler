@@ -12,10 +12,11 @@ import InterviewerListItem from "components/InterviewerListItem"
 import InterviewerList from "components/InterviewList"
 import Appointment from "components/Appointment/index.js";
 import Empty from "components/Appointment/Empty";
-import Show from "components/Appointment/Show"
-import Confirm from "components/Appointment/Confirm"
-import Status from "components/Appointment/Status"
-import Error from "components/Appointment/Error"
+import Show from "components/Appointment/Show";
+import Confirm from "components/Appointment/Confirm";
+import Status from "components/Appointment/Status";
+import Error from "components/Appointment/Error";
+import Form from "components/Appointment/Form.js";
 
 storiesOf("Button", module)
   .addParameters({
@@ -167,4 +168,18 @@ storiesOf("Button", module)
             <Error
             message="Could not delete appointment."
             onClose={action("onClose")}
-          />);
+          />)
+          .add("Create", () =>
+          <Form 
+            interviewers={interviewers}
+            onSave={action('onSave')}
+            onCancel={action('onCancel')}
+          />)
+        .add("Edit", () =>
+          <Form
+            student="Armin"
+            interviewer= {2}
+            interviewers={interviewers}
+            onSave={action("onSave")}
+            onCancel={action("onCancel")}
+        />);
