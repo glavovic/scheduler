@@ -5,7 +5,9 @@ export default function Appointment(props) {
 
   return (
 
-    <article className="appointment">{props.children}</article>
+    <article className="appointment">
+      {props.time ? `Appointment at ${props.time}` : `No Appointments`}
+    </article>
 
   )
 
