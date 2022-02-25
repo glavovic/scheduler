@@ -1,5 +1,3 @@
-import axios from "axios"
-import DayList from "components/DayList"
 
 export function getAppointmentsForDay(state, day) {
   //... returns an array of appointments for that day

@@ -5,6 +5,7 @@ import "components/Appointment"
 import Appointment from "components/Appointment";
 import axios from "axios";
 import { useEffect } from "react";
+import { getAppointmentsForDay } from "helpers/selectors";
 
 const appointments = [
   {
@@ -51,19 +52,50 @@ export default function Application() {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    // you may put the line below, but will have to remove/comment hardcoded appointments variable
-    appointments: {}
+    appointments: {},
+    interviewerz: {},
   });
 
-  const setDay = day => setState({ ...state, day });
-  const setDays = days => setState(prev => ({ ...prev, days }));
 
+  const dailyAppointments = getAppointmentsForDay(state, state.day)
+
+  const setDay = day => setState({ ...state, day });
+
+
+  
   useEffect(() => {
-    axios.get("/api/days")
-    .then(function (response) {
-      setDays([...response.data])
-    });
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
+    ]).then(all => {
+      console.log(all[0])
+      console.log(all[1])
+      console.log(all[2])
+
+      setState(prev => (
+        {...prev, 
+          days: all[0].data,  
+          appointments: all[1].data,
+          interviewerz: all[2].data,
+        }))
+    })
+    .catch(err => console.log({ err }))
   }, []);
+  
+  // axios.get("/api/days")
+  // .then(function (response) {
+  //   setDays([...response.data])
+  // });
+  
+
+  // useEffect(() => {
+  //   axios.get("/api/appointments")
+  //   .then(function (response) {
+  //     console.log(response.data)
+  //     setAppointments(response.data)
+  //   });
+  // }, []);
 
   
 
@@ -90,7 +122,7 @@ export default function Application() {
         />
       </section>
       <section className="schedule">
-        {appointments.map(appointment => (
+        {dailyAppointments.map(appointment => (
           <Appointment key={appointment.id} {...appointment}/>
         ))}
         <Appointment key="last" time="5pm" />
