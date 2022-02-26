@@ -1,15 +1,25 @@
+import Appointment from "components/Appointment"
 
 export function getAppointmentsForDay(state, day) {
   //... returns an array of appointments for that day
-  const dailyAppointments = []
+  const appointments = []
   state.days.filter(stateDay => {
     if(stateDay.name === day) {
       stateDay.appointments.filter(id =>{
-        dailyAppointments.push(state.appointments[id])
+        appointments.push(state.appointments[id])
       })
     }
   })
 
-  return dailyAppointments
+  return appointments
 }
 
+export function getInterview(state, interview) {
+
+  if (interview && interview.interviewer) {
+    return {...interview,
+    interviewer: state.interviewers[interview.interviewer]}
+  }
+ 
+  return null
+}
