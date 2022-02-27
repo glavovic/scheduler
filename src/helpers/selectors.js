@@ -1,7 +1,6 @@
-import Appointment from "components/Appointment"
 
 export function getAppointmentsForDay(state, day) {
-  //... returns an array of appointments for that day
+
   const appointments = []
   state.days.filter(stateDay => {
     if(stateDay.name === day) {
