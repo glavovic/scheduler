@@ -6,10 +6,11 @@ import Appointment from "components/Appointment";
 import axios from "axios";
 import { useEffect } from "react";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+import useVisualMode from "hooks/VisualMode";
 
 
 export default function Application() {
-
+  const { transition } = useVisualMode
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -19,6 +20,29 @@ export default function Application() {
 
   const interviewersForDay = getInterviewersForDay(state, state.day)
   const appointments = getAppointmentsForDay(state, state.day)
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    setState({
+      ...state,
+      appointments
+    });
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(response => {
+      console.log(response);
+      setState(prev => ({...prev, appointments})
+    )});
+  };
 
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -30,6 +54,7 @@ export default function Application() {
         time={appointment.time}
         interview={interview}
         interviewers={interviewersForDay}
+        bookInterview={bookInterview}
       />
     );
   });
@@ -43,10 +68,6 @@ export default function Application() {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers")
     ]).then(response => {
-      console.log("days: ", response[0].data)
-      console.log("appointments: ", response[1].data)
-      console.log("interviewers: ", response[2].data)
-
       setState(prev => (
         {...prev, 
           days: response[0].data,  
