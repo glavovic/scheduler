@@ -6,11 +6,11 @@ import Appointment from "components/Appointment";
 import axios from "axios";
 import { useEffect } from "react";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
-import useVisualMode from "hooks/VisualMode";
+
 
 
 export default function Application() {
-  const { transition } = useVisualMode
+
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -37,11 +37,11 @@ export default function Application() {
       ...state,
       appointments
     });
+
     return axios.put(`/api/appointments/${id}`, {interview})
     .then(response => {
       setState(prev => ({...prev, appointments})
-    )});
-    .catch(err => console.log(err))
+    )})
   };
   
   function cancelInterview(id) {
@@ -63,7 +63,8 @@ export default function Application() {
     return axios.delete(`/api/appointments/${id}`)
       .then(response => {
         setState(prev => ({...prev, appointments})
-    )});
+      )})
+      // .catch(err => console.log(err))
   };
 
 
@@ -99,7 +100,6 @@ export default function Application() {
           interviewers: response[2].data,
         }))
     })
-    .catch(err => console.log({ err }))
   }, []);
   
 

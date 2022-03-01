@@ -4,7 +4,7 @@ export function getAppointmentsForDay(state, day) {
   const appointments = []
   state.days.filter(stateDay => {
     if(stateDay.name === day) {
-      stateDay.appointments.filter(id =>{
+      stateDay.appointments.filter(id => {
         appointments.push(state.appointments[id])
       })
     }
