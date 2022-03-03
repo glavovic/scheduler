@@ -4,12 +4,13 @@ Scheduler project that allows a user to book interviews, They are able to cancel
 
 ## Final Product
 
-!["Main Urls Page:"]()
+!["Main Urls Page:"](https://github.com/glavovic/scheduler/blob/master/docs/mainPage.png?raw=true)
 
 
-!["Interview Form:"]()
+!["Interview Form:"](https://github.com/glavovic/scheduler/blob/master/docs/form.png?raw=true)
 
-!["Save"]()
+
+!["warning"](https://github.com/glavovic/scheduler/blob/master/docs/deleteWarning.png?raw=true)
 
 ## Dependencies
 
