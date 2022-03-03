@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 
 import "../styles/DayListItem.scss"
-
+//information for each day item 
 export default function DayListItem(props) {
 
   const dayClass = classNames('day-list__item', {

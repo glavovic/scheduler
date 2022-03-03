@@ -27,16 +27,18 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+
+  // to transition to edit Mode
   function onEdit() {
     transition(EDIT)
   }
-
+// to save interviw, add to database and remove a spot
   function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
-    
+    // async saving screen
     transition(SAVING, true)
 
     props.bookInterview(props.id, interview)
@@ -46,7 +48,7 @@ export default function Appointment(props) {
     )
       
   }
-
+// to save interviwer, edit to database 
   function edit(name, interviewer) {
     const interview = {
       student: name,
@@ -62,11 +64,11 @@ export default function Appointment(props) {
     )
       
   }
-
+// async delete screen
   function onDelete() {
     transition(CONFIRM)
   }
-
+// to remove interviw, remove from database and add a spot
   function deleteInterview() {
     transition(DELETING, true)
 
@@ -76,7 +78,7 @@ export default function Appointment(props) {
         transition(ERROR_DELETE, true)
       })
   }
-
+// different modes to display 
   return (
 
     <article className="appointment">

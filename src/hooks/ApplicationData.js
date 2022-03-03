@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function useApplicationData () {
 
-
+// states that get passed down
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -12,7 +12,9 @@ export default function useApplicationData () {
 });
   
   
-  
+/* function to save the interview to the database 
+and remove a spot from the daylist*/
+
  function bookInterview(id, interview) {
     
    
@@ -42,7 +44,7 @@ export default function useApplicationData () {
       )})
   };
     
-
+// function to edit the interview in the database
   function editInterview(id, interview) {
     
    
@@ -70,7 +72,7 @@ export default function useApplicationData () {
         })
       )})
   };
-
+// function to remove the interview from the database and add a spot
   function cancelInterview(id) {
       const appointment = {
         ...state.appointments[id],
@@ -99,7 +101,7 @@ export default function useApplicationData () {
       };
 
       const setDay = day => setState({ ...state, day });
-
+// get requests for each state
       useEffect(() => {
         Promise.all([
           axios.get("/api/days"),
