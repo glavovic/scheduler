@@ -13,7 +13,8 @@ export default function Application() {
     state,
     setDay,
     bookInterview,
-    cancelInterview
+    cancelInterview,
+    editInterview
   } = useApplicationData();
 
 
@@ -32,6 +33,7 @@ export default function Application() {
         interviewers={interviewersForDay}
         bookInterview={bookInterview}
         cancelInterview={cancelInterview}
+        editInterview={editInterview}
       />
     );
   });

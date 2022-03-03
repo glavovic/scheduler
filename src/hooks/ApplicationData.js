@@ -42,6 +42,35 @@ export default function useApplicationData () {
       )})
   };
     
+
+  function editInterview(id, interview) {
+    
+   
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    
+    setState({
+      ...state,
+      appointments
+    });
+
+    
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(response => {
+      setState(prev => (
+        {...prev,
+          appointments,
+        })
+      )})
+  };
+
   function cancelInterview(id) {
       const appointment = {
         ...state.appointments[id],
@@ -87,21 +116,6 @@ export default function useApplicationData () {
         // .catch(err => console.log({ err }))
       }, []);
 
-      const countSpots = (state, day) => {
-        let spot = day.spot
-        console.log(spot)
-        const currentDay = state.days.find((dayItem) => dayItem.name === day);
-        const appointmentIds = currentDay.appointments;
-      
-        const interviewsForTheDay = appointmentIds.map(
-          (id) => state.appointments[id].interview
-        );
-      
-        const emptyInterviewsForTheDay = interviewsForTheDay.filter((interview) => !interview);
-        const spots = emptyInterviewsForTheDay.length;
-      
-        return spots;
-      };
 
-      return { bookInterview, cancelInterview, state, setDay }
+      return { bookInterview, cancelInterview, state, setDay, editInterview}
 }
