@@ -48,23 +48,7 @@ export default function Appointment(props) {
     )
       
   }
-// to save interviwer, edit to database 
-  function edit(name, interviewer) {
-    const interview = {
-      student: name,
-      interviewer
-    };
-    
-    transition(SAVING, true)
 
-    props.editInterview(props.id, interview)
-    .then(() => {transition(SHOW)})
-    .catch(error => 
-      transition(ERROR_SAVE, true)
-
-    )
-      
-  }
 // async delete screen
   function onDelete() {
     transition(CONFIRM)
