@@ -11,14 +11,15 @@ export default function useVisualMode(initial) {
   }
 // to go back a component in the history
   const back = () => {
-    if(history.length > 1) {
-      
-      history.pop()
-      setMode(history[history.length -1])
+    if (history.length > 1) {
+      const prevHistory = [...history]
+
+      prevHistory.pop()
+      setHistory(prevHistory)
+      setMode(prevHistory[prevHistory.length-1])
     }
   }
 
   return { mode, transition, back};
 
 }
-

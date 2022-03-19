@@ -10,10 +10,56 @@ export default function useApplicationData () {
     appointments: {},
     interviewers: {},
 });
+
+const setDay = day => setState({ ...state, day });
   
+// get requests for each state
+useEffect(() => {
+  Promise.all([
+    axios.get("/api/days"),
+    axios.get("/api/appointments"),
+    axios.get("/api/interviewers")
+  ]).then(response => {
+    setState(prev => (
+      {...prev, 
+        days: response[0].data,  
+        appointments: response[1].data,
+        interviewers: response[2].data,
+      }))
+  })
+}, []);
   
 /* function to save the interview to the database 
 and remove a spot from the daylist*/
+
+const remainingSpots = (appointments, days) => {
+  let appointmentsId = [];
+  let count = 0;
+  //loop over days
+  const spots = days.map((day) => {
+    //if day name is equal to the state day
+    if (day.name === state.day) {
+      //push appointments into the appointmentsId array
+      appointmentsId = day.appointments;
+      for (let key in appointments) {
+        const remainingAppointment = appointments[key];
+        // if appointments Id included the key of appointments and it is equal to null increase the count of remaining spots
+        if (appointmentsId.includes(remainingAppointment.id)) {
+          if (remainingAppointment.interview === null) {
+            count++;
+          }
+        }
+      }
+      day.spots = count;
+    }
+    return day;
+  });
+
+  return spots;
+};
+// .catch(err => console.log({ err }))
+
+
 
  function bookInterview(id, interview) {
     
@@ -28,18 +74,14 @@ and remove a spot from the daylist*/
       [id]: appointment
     };
     
-    setState({
-      ...state,
-      appointments
-    });
-
+    const availableSpots = remainingSpots(appointments, state.days)
     
     return axios.put(`/api/appointments/${id}`, {interview})
     .then(response => {
       setState(prev => (
         {...prev,
           appointments,
-          days: prev.days.map(day => day.appointments.includes(id) ? {...day, spots: day.spots - 1} : day)
+          days: availableSpots
         })
       )})
   };
@@ -74,50 +116,21 @@ and remove a spot from the daylist*/
   };
 // function to remove the interview from the database and add a spot
   function cancelInterview(id) {
-      const appointment = {
-        ...state.appointments[id],
-      };
-      
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-        
-      };
-      
+    //get all existing appointments
+    const appointments = {
+      ...state.appointments,
+    };
+    // change the interview state to null
+    appointments[id].interview = null;
+    const availableSpots = remainingSpots(appointments, state.days);
+    return axios.delete(`/api/appointments/${id}`).then(() => {
       setState({
         ...state,
-        appointments
+        appointments,
+        days: availableSpots,
       });
+    });
+  };
       
-      return axios.delete(`/api/appointments/${id}`)
-      .then(response => {
-        setState(prev => ({...prev, 
-          appointments,
-          days: prev.days.map(day => day.appointments.includes(id) ? {...day, spots: day.spots + 1} : day)
-        })
-        )
-      })
-        // .catch(err => console.log(err))
-      };
-
-      const setDay = day => setState({ ...state, day });
-// get requests for each state
-      useEffect(() => {
-        Promise.all([
-          axios.get("/api/days"),
-          axios.get("/api/appointments"),
-          axios.get("/api/interviewers")
-        ]).then(response => {
-          setState(prev => (
-            {...prev, 
-              days: response[0].data,  
-              appointments: response[1].data,
-              interviewers: response[2].data,
-            }))
-        })
-        // .catch(err => console.log({ err }))
-      }, []);
-
-
       return { bookInterview, cancelInterview, state, setDay, editInterview}
 }
